@@ -1,6 +1,6 @@
 #!/bin/sh
 
-####### generate file #######
+####### Generate Files #######
 # @author: lencx            #
 # @create_at: Aug 07, 2020  #
 #############################
@@ -36,11 +36,6 @@ else
   dirName=$ROOT_DIR/$1
 fi
 
-# if [ -d $dirName ];then
-#   echo "❗️Error: target directory is not empty."
-#   exit 1
-# fi
-
 mkdir -p $dirName
 
 if [ $ca1_2 ];then
@@ -48,13 +43,8 @@ if [ $ca1_2 ];then
   exit 0
 fi
 
-# cp -r bin/template $dirName
-# for i in $dirName/*
 for i in ${FILES_EXT[@]}
 do
-  # f=${i:4}
-  # echo "Working $f filename ..."
-
   # Check if the file exists, exit if it exists
   if [ -f $dirName/main$i ];then
     echo "❗️exists: $dirName/main$i"
@@ -81,12 +71,6 @@ do
 // @create_at: $CREATE_AT
 " >> $dirName/main$i
   fi
-
-  # read a file line-by-line using while loop
-  # while IFS= read -r line
-  # do
-  #   printf 'Working on %s file...\n' "$line"
-  # done < $i
 done
 
 echo "✨Done!"
