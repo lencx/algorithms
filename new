@@ -12,19 +12,29 @@ TARGET_DIR=''
 CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 AUTHOR='lencx'
 PKG_NAME='new'
-PKG_VERSION='0.0.1'
+PKG_VERSION='0.0.3'
 FILE_TYPE='js'
 FILE_CONTENTS=''
+IS_DONE="false"
+
+COLOR_RED="\033[0;31m"
+COLOR_GREEN="\033[0;32m"
+COLOR_YELLOW="\033[0;33m"
+COLOR_BLUE="\033[0;34m"
+COLOR_RESET="\033[0m"
+
+INFO_WARN="${COLOR_YELLOW}[WARN]"
+INFO_EXISTS="${COLOR_BLUE}[EXIST]"
+INFO_OK="${COLOR_GREEN}[OK]"
 
 main() {
   if [ ! $1 ];then
     handle_args "-h"
     exit 0
   fi
-  # create_file "main.rs" "// @author: $AUTHOR\n// @create_at: $CREATE_AT\n"
+
   echo ""
-  echo "✨Done!"
-  echo ""
+  if [ $IS_DONE == "true" ];then echo "✨Done!\n"; fi
   echo "$ cd $TARGET_DIR"
 }
 
@@ -73,14 +83,15 @@ handle_args() {
   if [ ! $1 ];then file_missing $1;fi
 
   mkdir -p $TARGET_DIR
-  create_file "README.md" "# $1"
+  echo ""
+  create_file "README.md" "# $1\n"
   create_file_type "$FILE_TYPE"
 }
 
 file_missing() {
   if [ ! $1 ];then
-    echo "WARN: File name is missing"
-    echo "Usage: new -h"
+    print "$INFO_WARN" "File name is missing"
+    echo "Usage: ${COLOR_GREEN}new -h$COLOR_RESET"
     exit 0
   fi
 }
@@ -89,9 +100,11 @@ create_file() {
   TARGET_FILE=$TARGET_DIR/$1
   if [ ! -f $TARGET_FILE ];then
     printf "$2" >> $TARGET_FILE
+    if [ $1 != 'README.md' ];then IS_DONE="true"; fi
+    print "$INFO_OK" "$TARGET_FILE"
   else
     if [ $1 != 'README.md' ];then
-      echo "\n❗️WRAN: $TARGET_FILE"
+      print "$INFO_EXISTS" "$TARGET_FILE"
     fi
   fi
 }
@@ -113,6 +126,10 @@ create_file_type() {
   esac
 
   create_file "main.$1" "$FILE_CONTENTS"
+}
+
+print() {
+  echo "$1$COLOR_RESET $2$COLOR_RESET"
 }
 
 handle_args "$@"
