@@ -12,7 +12,7 @@ TARGET_DIR=''
 CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 AUTHOR='lencx'
 PKG_NAME='new'
-PKG_VERSION='0.0.3'
+PKG_VERSION='0.0.4'
 FILE_TYPE='js'
 FILE_CONTENTS=''
 IS_DONE="false"
@@ -84,7 +84,7 @@ handle_args() {
 
   mkdir -p $TARGET_DIR
   echo ""
-  create_file "README.md" "# $1\n"
+  create_file "README.md" "# `echo $1 | sed 's/_/ /g'`\n"
   create_file_type "$FILE_TYPE"
 }
 
