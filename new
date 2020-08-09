@@ -99,10 +99,13 @@ create_file() {
 create_file_type() {
   case $1 in
     js)
-      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\ns"
+      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\n"
     ;;
-    rs)
+    rs|c|go)
       FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n"
+    ;;
+    py)
+      FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\n"
     ;;
     *)
       break
