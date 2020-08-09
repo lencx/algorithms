@@ -27,3 +27,10 @@ return [0, 1].
 因为 nums[0] + nums[1] = 2 + 7 = 9
 所以返回 [0, 1]
 ```
+
+<details>
+<summary>
+  <b>解题思路</b>
+</summary>
+
+</details>
