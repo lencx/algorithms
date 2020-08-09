@@ -10,7 +10,7 @@
 CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 AUTHOR='lencx'
 PKG_NAME='new'
-PKG_VERSION='0.0.5'
+PKG_VERSION='0.1.0'
 ROOT_DIR=src
 TARGET_DIR=''
 DIR_NAME=''
@@ -122,7 +122,6 @@ create_file() {
 create_file_type() {
   case $1 in
     js)
-      # TODO: template function
       FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nvar $NAME_2 = function() {\n  \n};"
     ;;
     rs)
@@ -130,8 +129,9 @@ create_file_type() {
       FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n#[allow(dead_code)]\npub fn $2() {\n  \n}\n\n#[test]\nfn test() {\n  \n}"
     ;;
     py)
-      FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\n"
+      FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\ndef $NAME_2():\n  "
     ;;
+    # TODO: more template
     *)
       break
     ;;
