@@ -7,15 +7,19 @@
 #   create_at: Aug 07, 2020                                     #
 #################################################################
 
-ROOT_DIR=src
-TARGET_DIR=''
 CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 AUTHOR='lencx'
 PKG_NAME='new'
-PKG_VERSION='0.0.4'
+PKG_VERSION='0.0.5'
+ROOT_DIR=src
+TARGET_DIR=''
+DIR_NAME=''
+FILE_NAME='main'
 FILE_TYPE='js'
 FILE_CONTENTS=''
 IS_DONE="false"
+NAME_1='' # aa_bb_cc => AaBbCc
+NAME_2='' # aa_bb_cc => aaBbCc
 
 COLOR_RED="\033[0;31m"
 COLOR_GREEN="\033[0;32m"
@@ -75,6 +79,9 @@ handle_args() {
 
       *)
         TARGET_DIR=$ROOT_DIR/$1
+        DIR_NAME=$1
+        NAME_1=$(camel_case "$1" "false")
+        NAME_2=$(camel_case "$1" "true")
         break
       ;;
     esac
@@ -85,7 +92,7 @@ handle_args() {
   mkdir -p $TARGET_DIR
   echo ""
   create_file "README.md" "# `echo $1 | sed 's/_/ /g'`\n"
-  create_file_type "$FILE_TYPE"
+  create_file_type "$FILE_TYPE" "$1"
 }
 
 file_missing() {
@@ -102,6 +109,9 @@ create_file() {
     printf "$2" >> $TARGET_FILE
     if [ $1 != 'README.md' ];then IS_DONE="true"; fi
     print "$INFO_OK" "$TARGET_FILE"
+    if [ $1 == 'mod.rs' ];then
+      echo "mod $DIR_NAME;" >> $ROOT_DIR/lib.rs
+    fi
   else
     if [ $1 != 'README.md' ];then
       print "$INFO_EXISTS" "$TARGET_FILE"
@@ -112,10 +122,12 @@ create_file() {
 create_file_type() {
   case $1 in
     js)
-      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\n"
+      # TODO: template function
+      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nvar $NAME_2 = function() {\n  \n};"
     ;;
-    rs|c|go)
-      FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n"
+    rs)
+      FILE_NAME="mod"
+      FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n#[allow(dead_code)]\npub fn $2() {\n  \n}\n\n#[test]\nfn test() {\n  \n}"
     ;;
     py)
       FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\n"
@@ -125,11 +137,29 @@ create_file_type() {
     ;;
   esac
 
-  create_file "main.$1" "$FILE_CONTENTS"
+  create_file "$FILE_NAME.$1" "$FILE_CONTENTS"
 }
 
 print() {
   echo "$1$COLOR_RESET $2$COLOR_RESET"
+}
+
+camel_case() {
+  str_arr=(`echo $1 | tr '_' ' '`)
+  result=''
+  for i in ${str_arr[@]}
+  do
+    first_letter=`echo ${i:0:1} | awk '{print toupper($0)}'`
+    other_letter=${i:1}
+    result=$result$first_letter$other_letter
+  done
+
+  if [ $2 == 'true' ];then
+    first_result=$(echo ${result:0:1} | tr '[A-Z]' '[a-z]')
+    result=$first_result${result:1}
+  fi
+  echo $result
+  return $?
 }
 
 handle_args "$@"
