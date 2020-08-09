@@ -1,0 +1,116 @@
+#!/bin/sh
+
+#################################################################
+#   Copyright (c) 2020 lencx, Licensed MIT license              #
+#   Quickly create a template file by command                   #
+#   author: lencx <cxin1314@gmail.com>                          #
+#   create_at: Aug 07, 2020                                     #
+#################################################################
+
+ROOT_DIR=src
+TARGET_DIR=''
+CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
+AUTHOR='lencx'
+PKG_NAME='new'
+PKG_VERSION='0.0.1'
+FILE_TYPE='js'
+FILE_CONTENTS=''
+
+main() {
+  if [ ! $1 ];then
+    handle_args "-h"
+    exit 0
+  fi
+  # create_file "main.rs" "// @author: $AUTHOR\n// @create_at: $CREATE_AT\n"
+  echo ""
+  echo "✨Done!"
+  echo ""
+  echo "$ cd $TARGET_DIR"
+}
+
+handle_args() {
+  while test $# -gt 0; do
+    case $1 in
+      -h|--help)
+        echo "Quickly create a template file by command"
+        echo ""
+        echo "Usage: $PKG_NAME [options] directory_name"
+        echo "Version: $PKG_VERSION"
+        echo ""
+        echo "Options:"
+        echo "-a, --author          files creator"
+        echo "-h, --help            print '$PKG_NAME' command line options"
+        echo "-l, --lang            programming language(file extension), default: js"
+        echo "                      example: -l=rs, -l=go etc."
+        echo "-v, --version         print '$PKG_NAME' version"
+        exit 0
+      ;;
+
+      -a*|--author*)
+        export NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
+        AUTHOR=$NAME
+        shift
+      ;;
+
+      -l*|--lang*)
+        export LANG_TYPE=`echo $1 | sed -e 's/^[^=]*=//g'`
+        FILE_TYPE=$LANG_TYPE
+        shift
+      ;;
+
+      -v|--version)
+        echo "$PKG_NAME $PKG_VERSION"
+        exit 0
+      ;;
+
+      *)
+        TARGET_DIR=$ROOT_DIR/$1
+        break
+      ;;
+    esac
+  done
+
+  if [ ! $1 ];then file_missing $1;fi
+
+  mkdir -p $TARGET_DIR
+  create_file "README.md" "# $1"
+  create_file_type "$FILE_TYPE"
+}
+
+file_missing() {
+  if [ ! $1 ];then
+    echo "WARN: File name is missing"
+    echo "Usage: new -h"
+    exit 0
+  fi
+}
+
+create_file() {
+  TARGET_FILE=$TARGET_DIR/$1
+  if [ ! -f $TARGET_FILE ];then
+    printf "$2" >> $TARGET_FILE
+  else
+    if [ $1 != 'README.md' ];then
+      echo "\n❗️WRAN: $TARGET_FILE"
+    fi
+  fi
+}
+
+create_file_type() {
+  case $1 in
+    js)
+      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\ns"
+    ;;
+    rs)
+      FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n"
+    ;;
+    *)
+      break
+    ;;
+  esac
+
+  create_file "main.$1" "$FILE_CONTENTS"
+}
+
+handle_args "$@"
+main "$@"

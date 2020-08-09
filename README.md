@@ -1,6 +1,7 @@
 # Data Structure And Algorithm
 
 ```bash
-# generate files
-./bin/new.sh [-ahl] directory_name
+# Quickly create a template file by command
+# -a|--author / -h|--help / -l|--lang(language) / -v|--version
+./new [-ahlv] directory_name
 ```
