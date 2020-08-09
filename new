@@ -7,26 +7,27 @@
 #   create_at: Aug 07, 2020                                     #
 #################################################################
 
-CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 AUTHOR='lencx'
 PKG_NAME='new'
-PKG_VERSION='0.1.0'
-ROOT_DIR=src
-TARGET_DIR=''
-DIR_NAME=''
-FILE_NAME='main'
-FILE_TYPE='js'
-FILE_CONTENTS=''
-IS_DONE="false"
-NAME_1='' # aa_bb_cc => AaBbCc
-NAME_2='' # aa_bb_cc => aaBbCc
+PKG_VERSION='0.1.1'
+CREATE_AT=$(LANG=en_us_88591; date '+%b %d, %Y')
 
+# dir & file
+ROOT_DIR="src"
+TARGET_DIR=""
+FILE_NAME="main"
+FILE_TYPE="js"
+FILE_CONTENTS=""
+IS_DONE="false"
+
+# colors
 COLOR_RED="\033[0;31m"
 COLOR_GREEN="\033[0;32m"
 COLOR_YELLOW="\033[0;33m"
 COLOR_BLUE="\033[0;34m"
 COLOR_RESET="\033[0m"
 
+# info type
 INFO_WARN="${COLOR_YELLOW}[WARN]"
 INFO_EXISTS="${COLOR_BLUE}[EXIST]"
 INFO_OK="${COLOR_GREEN}[OK]"
@@ -46,29 +47,27 @@ handle_args() {
   while test $# -gt 0; do
     case $1 in
       -h|--help)
-        echo "Quickly create a template file by command"
         echo ""
+        echo "Quickly create a template file by command"
         echo "Usage: $PKG_NAME [options] directory_name"
-        echo "Version: $PKG_VERSION"
+        echo "Info: [github:lencx] - v$PKG_VERSION"
         echo ""
         echo "Options:"
-        echo "-a, --author          files creator"
-        echo "-h, --help            print '$PKG_NAME' command line options"
-        echo "-l, --lang            programming language(file extension), default: js"
-        echo "                      example: -l=rs, -l=go etc."
-        echo "-v, --version         print '$PKG_NAME' version"
+        echo "  -h,  --help           print '$PKG_NAME' command line options"
+        echo "  -v,  --version        print '$PKG_NAME' version"
+        echo "  -a=, --author=        files creator"
+        echo "  -l=, --lang=          programming language(file extension), default: js"
+        echo "                        example: -l=rs, -l=go etc."
         exit 0
       ;;
 
       -a*|--author*)
-        export NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
-        AUTHOR=$NAME
+        AUTHOR=`echo $1 | sed -e 's/^[^=]*=//g'`
         shift
       ;;
 
       -l*|--lang*)
-        export LANG_TYPE=`echo $1 | sed -e 's/^[^=]*=//g'`
-        FILE_TYPE=$LANG_TYPE
+        FILE_TYPE=`echo $1 | sed -e 's/^[^=]*=//g'`
         shift
       ;;
 
@@ -80,8 +79,8 @@ handle_args() {
       *)
         TARGET_DIR=$ROOT_DIR/$1
         DIR_NAME=$1
-        NAME_1=$(camel_case "$1" "false")
-        NAME_2=$(camel_case "$1" "true")
+        # aa_bb_cc => aaBbCc
+        CAMEL_CASE_NAME=$(camel_case "$1" "true")
         break
       ;;
     esac
@@ -122,14 +121,14 @@ create_file() {
 create_file_type() {
   case $1 in
     js)
-      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nvar $NAME_2 = function() {\n  \n};"
+      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nvar $CAMEL_CASE_NAME = function() {\n  \n};"
     ;;
     rs)
       FILE_NAME="mod"
       FILE_CONTENTS="// @author: $AUTHOR\n// @create_at: $CREATE_AT\n\n#[allow(dead_code)]\npub fn $2() {\n  \n}\n\n#[test]\nfn test() {\n  \n}"
     ;;
     py)
-      FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\ndef $NAME_2():\n  "
+      FILE_CONTENTS="# @author: $AUTHOR\n# @create_at: $CREATE_AT\n\ndef $CAMEL_CASE_NAME():\n  "
     ;;
     # TODO: more template
     *)
@@ -144,6 +143,7 @@ print() {
   echo "$1$COLOR_RESET $2$COLOR_RESET"
 }
 
+# aa_bb_cc => AaBbCc
 camel_case() {
   str_arr=(`echo $1 | tr '_' ' '`)
   result=''
@@ -154,6 +154,7 @@ camel_case() {
     result=$result$first_letter$other_letter
   done
 
+  # aa_bb_cc => aaBbCc
   if [ $2 == 'true' ];then
     first_result=$(echo ${result:0:1} | tr '[A-Z]' '[a-z]')
     result=$first_result${result:1}
