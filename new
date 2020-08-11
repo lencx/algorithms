@@ -109,7 +109,7 @@ create_file() {
     if [ $1 != 'README.md' ];then IS_DONE="true"; fi
     print "$INFO_OK" "$TARGET_FILE"
     if [ $1 == 'mod.rs' ];then
-      echo "mod $DIR_NAME;" >> $ROOT_DIR/lib.rs
+      echo "pub mod $DIR_NAME;" >> $ROOT_DIR/lib.rs
     fi
   else
     if [ $1 != 'README.md' ];then

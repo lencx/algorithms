@@ -1,4 +1,4 @@
-# Data Structure And Algorithm
+# Data Structure And Algorithms
 
 ```bash
 # Quickly create a template file by command
