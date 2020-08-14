@@ -1,0 +1,16 @@
+{
+	"scripts": {
+		"test": "ava"
+	},
+	"devDependencies": {
+		"ava": "^3.11.1"
+	},
+	"ava": {
+    "files": [
+      "src/**/*.js"
+    ],
+    "source": [
+      "src/**/*.js"
+		]
+  }
+}

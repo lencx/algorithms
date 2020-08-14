@@ -121,7 +121,7 @@ create_file() {
 create_file_type() {
   case $1 in
     js)
-      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nvar $CAMEL_CASE_NAME = function() {\n  \n};"
+      FILE_CONTENTS="/*\n * @author: $AUTHOR\n * @create_at: $CREATE_AT\n */\n\nconst test = require('ava');\n\nvar $CAMEL_CASE_NAME = function() {\n  \n};\n\ntest('$DIR_NAME', t => {\n  // t.deepEqual(${CAMEL_CASE_NAME}(), );\n});"
     ;;
     rs)
       FILE_NAME="mod"

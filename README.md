@@ -8,6 +8,18 @@
 ./new [-ahlv] directory_name
 ```
 
+## Test
+
+```bash
+# rust
+cargo test
+
+# js
+# see: https://github.com/avajs/ava
+# npm run test [--tap]
+yarn test [--tap]
+```
+
 ## Problemset
 
 * **rust test**: `cargo test`

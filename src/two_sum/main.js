@@ -3,6 +3,8 @@
  * @create_at: Aug 09, 2020
  */
 
+const test = require('ava');
+
 /**
  * @param {number[]} nums
  * @param {number} target
@@ -18,4 +20,10 @@ var twoSum = function(nums, target) {
       o.set(nums[i], i);
     }
   }
+  return [];
 };
+
+test('two_sum', t => {
+  t.deepEqual(twoSum([2, 5, 6, 9], 11), [1, 2])
+  t.deepEqual(twoSum([2, 5, 6, 9], 12), [])
+});
