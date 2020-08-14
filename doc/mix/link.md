@@ -11,3 +11,4 @@
 * [Contest Algorithms in Rust](https://github.com/EbTech/rust-algorithms)
 * [labuladong 的算法小抄](https://github.com/labuladong/fucking-algorithm)
 * [小浩学算法](https://github.com/geekxh/hello-algorithm)
+* [🎆Interactive Online Platform that Visualizes Algorithms from Code](https://github.com/algorithm-visualizer)
